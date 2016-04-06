@@ -63,6 +63,7 @@
 #define IP_RECVTTL         12	/* bool */
 #define IP_RECVTOS         13	/* bool */
 
+#define TI_IP_META_DATA    18   /* unsigned int; TI Meta-Data Extension */
 
 /* IP_MTU_DISCOVER arguments.  */
 #define IP_PMTUDISC_DONT   0	/* Never send DF frames.  */

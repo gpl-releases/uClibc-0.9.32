@@ -16,6 +16,10 @@
    License along with the GNU C Library; if not, write to the Free
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
+/* 
+ * Includes Intel Corporation's changes/modifications dated: [11/07/2011].
+* Changed/modified portions - Copyright © [2011], Intel Corporation.
+*/
 
 #ifndef	_NETINET_IN_H
 #define	_NETINET_IN_H	1
@@ -489,7 +493,35 @@ extern int bindresvport6 (int __sockfd, struct sockaddr_in6 *__sock_in)
 	 && ((((__const uint8_t *) (a))[1] & 0xf) == 0xe))
 #endif
 
+#ifdef CONFIG_TI_IP_PKTINFO_SOCKOPT
+/* 
+* TI Extension:
+*   socket option for ability to recieve the relevent for 
+*   cable TI modem information through the IPv4 socket.
+*/
+#ifndef TI_IP_PKTINFO
+#define TI_IP_PKTINFO	23
+#endif
 
+/* from /linux/in6.h */
+#ifndef TI_IPV6_PKTINFO
+#define TI_IPV6_PKTINFO	81
+#endif
+
+/*
+*  TI Extension:
+*   data structure for passing the needed information
+*   about the incoming packet. Currently we only need a small element
+*/
+#ifndef TI_PKTINFO_STRUCT
+#define TI_PKTINFO_STRUCT
+struct ti_pktinfo
+{
+	int		ifcpe_side;
+    char    mac_addr[6];
+};
+#endif
+#endif
 #ifdef __USE_GNU
 # if defined __UCLIBC_HAS_IPV6__ || !defined __UCLIBC_STRICT_HEADERS__
 /* IPv6 packet information.  */

@@ -40,6 +40,14 @@
  * Modified for uClibc by Erik Andersen <andersen@uclibc.org>
  */
 
+/*
+    Copyright (c) <2010-20011> Intel Corporation.
+ 
+    Modifications:
+    -   daemon():
+        *   The parent will exit only after it ensures the child has been detached.
+ 
+*/
 #include <stdio.h>
 #include <features.h>
 #include <fcntl.h>
@@ -104,12 +112,48 @@ static inline pid_t fork_parent(void)
 int daemon(int nochdir, int noclose)
 {
 	int fd;
+    pid_t chld_pid;
+    int pipefd[2];
+    char buf;
 
-	if (fork_parent() == -1)
-		return -1;
+    /* Create pipe */
+    if (pipe(pipefd) == -1)
+    {
+        return -1;
+    }
+    chld_pid = fork();
+    switch (chld_pid) 
+    {
+        case -1: 
+            return -1;
+        case 0:  
+            /* Continue */
+            break;
+        default:  
+            /* Parent, wait for child before exiting */
 
-	if (setsid() == -1)
-		return -1;
+            /* Close write side */
+            close(pipefd[1]);
+            /* wait on read side */
+            read(pipefd[0], &buf, 1);
+            /* close read side */
+            close(pipefd[0]);
+            /* done */
+            _exit(0);
+    }
+    /* Child */
+
+    if (setsid() == -1)
+        return -1;
+
+    /* Now we are detached from the parent, and the parent can exit, notify parent */
+
+    /* Close read side */
+    close(pipefd[0]);
+    /* write something */
+    write(pipefd[1], 1, 1);
+    /* Close write side */
+    close(pipefd[1]);
 
 	if (!nochdir)
 		chdir("/");

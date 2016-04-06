@@ -87,8 +87,10 @@ static int      fts_safe_changedir (FTS *, FTSENT *, int, const char *)
 #define	BREAD		3		/* fts_read */
 
 FTS *
-fts_open( char * const *argv, register int options,
-		int (*compar) (const FTSENT **, const FTSENT **))
+fts_open(argv, options, compar)
+	char * const *argv;
+	register int options;
+	int (*compar) (const FTSENT **, const FTSENT **);
 {
 	register FTS *sp;
 	register FTSENT *p, *root;
@@ -202,7 +204,9 @@ mem1:	free(sp);
 
 static void
 internal_function
-fts_load(FTS *sp, register FTSENT *p)
+fts_load(sp, p)
+	FTS *sp;
+	register FTSENT *p;
 {
 	register int len;
 	register char *cp;
@@ -226,7 +230,8 @@ fts_load(FTS *sp, register FTSENT *p)
 }
 
 int
-fts_close(FTS *sp)
+fts_close(sp)
+	FTS *sp;
 {
 	register FTSENT *freep, *p;
 	int saved_errno;
@@ -279,7 +284,8 @@ fts_close(FTS *sp)
 	    ? p->fts_pathlen - 1 : p->fts_pathlen)
 
 FTSENT *
-fts_read(register FTS *sp)
+fts_read(sp)
+	register FTS *sp;
 {
 	register FTSENT *p, *tmp;
 	register int instr;
@@ -475,7 +481,10 @@ name:		t = sp->fts_path + NAPPEND(p->fts_parent);
  */
 /* ARGSUSED */
 int
-fts_set(FTS *sp, FTSENT *p, int instr)
+fts_set(sp, p, instr)
+	FTS *sp;
+	FTSENT *p;
+	int instr;
 {
 	if (instr != 0 && instr != FTS_AGAIN && instr != FTS_FOLLOW &&
 	    instr != FTS_NOINSTR && instr != FTS_SKIP) {
@@ -487,7 +496,9 @@ fts_set(FTS *sp, FTSENT *p, int instr)
 }
 
 FTSENT *
-fts_children(register FTS *sp, int instr)
+fts_children(sp, instr)
+	register FTS *sp;
+	int instr;
 {
 	register FTSENT *p;
 	int fd;
@@ -568,7 +579,9 @@ fts_children(register FTS *sp, int instr)
  */
 static FTSENT *
 internal_function
-fts_build(register FTS *sp, int type)
+fts_build(sp, type)
+	register FTS *sp;
+	int type;
 {
 	register struct dirent *dp;
 	register FTSENT *p, *head;
@@ -838,7 +851,10 @@ mem1:				saved_errno = errno;
 
 static u_short
 internal_function
-fts_stat(FTS *sp, register FTSENT *p, int follow)
+fts_stat(sp, p, follow)
+	FTS *sp;
+	register FTSENT *p;
+	int follow;
 {
 	register FTSENT *t;
 	register dev_t dev;
@@ -919,7 +935,10 @@ err:		memset(sbp, 0, sizeof(struct stat));
 
 static FTSENT *
 internal_function
-fts_sort(FTS *sp, FTSENT *head, register int nitems)
+fts_sort(sp, head, nitems)
+	FTS *sp;
+	FTSENT *head;
+	register int nitems;
 {
 	register FTSENT **ap, *p;
 
@@ -954,7 +973,10 @@ fts_sort(FTS *sp, FTSENT *head, register int nitems)
 
 static FTSENT *
 internal_function
-fts_alloc(FTS *sp, const char *name, size_t namelen)
+fts_alloc(sp, name, namelen)
+	FTS *sp;
+	const char *name;
+	size_t namelen;
 {
 	register FTSENT *p;
 	size_t len;
@@ -991,7 +1013,8 @@ fts_alloc(FTS *sp, const char *name, size_t namelen)
 
 static void
 internal_function
-fts_lfree(register FTSENT *head)
+fts_lfree(head)
+	register FTSENT *head;
 {
 	register FTSENT *p;
 
@@ -1010,7 +1033,9 @@ fts_lfree(register FTSENT *head)
  */
 static int
 internal_function
-fts_palloc(FTS *sp, size_t more)
+fts_palloc(sp, more)
+	FTS *sp;
+	size_t more;
 {
 	char *p;
 
@@ -1042,7 +1067,9 @@ fts_palloc(FTS *sp, size_t more)
  */
 static void
 internal_function
-fts_padjust(FTS *sp, FTSENT *head)
+fts_padjust(sp, head)
+	FTS *sp;
+	FTSENT *head;
 {
 	FTSENT *p;
 	char *addr = sp->fts_path;
@@ -1067,7 +1094,8 @@ fts_padjust(FTS *sp, FTSENT *head)
 
 static size_t
 internal_function
-fts_maxarglen(char * const *argv)
+fts_maxarglen(argv)
+	char * const *argv;
 {
 	size_t len, max;
 
@@ -1084,7 +1112,11 @@ fts_maxarglen(char * const *argv)
  */
 static int
 internal_function
-fts_safe_changedir(FTS *sp, FTSENT *p, int fd, const char *path)
+fts_safe_changedir(sp, p, fd, path)
+	FTS *sp;
+	FTSENT *p;
+	int fd;
+	const char *path;
 {
 	int ret, oerrno, newfd;
 	struct stat64 sb;

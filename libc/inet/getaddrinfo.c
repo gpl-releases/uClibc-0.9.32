@@ -50,7 +50,10 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   If these license terms cause you a real problem, contact the author.  */
-
+/*
+Includes Intel Corporation's changes/modifications dated: 10/31/2011. 
+Changed/modified portions - Copyright © 2011, Intel Corporation.   
+*/
 #define __FORCE_GLIBC
 #include <features.h>
 #include <assert.h>
